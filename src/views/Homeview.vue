@@ -3,6 +3,8 @@ import { onMounted, ref, watch } from "vue";
 import TaskManagement from "./../lib/TaskManagement.js";
 import { useRoute } from "vue-router";
 import { getItems } from "./../assets/fetch.js";
+import Cancel from "@/components/cancel.vue";
+
 const datas = ref(TaskManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
 const route = useRoute();
@@ -24,14 +26,18 @@ onMounted(async function () {
         <div class="text-4xl">IT-Bangmod Kradan Kanban</div>
       </span>
     </div>
-    <div class="itbkk-button-add flex justify-end">
-      <button
-        onclick="taskmodal.showModal()"
-        class="btn btn-secondary text-slate-300"
-      >
-        Add your task
-      </button>
+
+    <div class="itbkk-button-add flex flex-col justify-start">
+  <div class="border border-green-300 rounded-lg p-2 bg-green-50 relative shadow-md">
+    <div class="mr-2 text-green-700 font-bold flex items-center justify-between">
+      <span>Success</span>
     </div>
+    <div class="itbkk-message text-green-600">The task "Frontend UX/UI Design" is added successfully</div>
+    <Cancel class="absolute top-2 right-1 transform rotate-40 text-green-800 font-extrabold"/>
+  </div>
+</div>
+
+
     <table class="min-w-full divide-y divide-gray-200">
       <thead class="bg-gray-200">
         <tr>
@@ -108,7 +114,31 @@ onMounted(async function () {
         </tr>
       </tbody>
     </table>
+
+    <div class="itbkk-button-add flex flex-col justify-start">
+  <div class="border border-red-300 rounded-lg p-2 bg-red-50 relative shadow-md">
+    <div class="mr-2 text-red-700 font-bold flex items-center justify-between">
+      <span>Error</span>
+    </div>
+    <div class="itbkk-message text-red-600">An error occurred deleting the task "Frontend UX/UI Design"</div>
+    <Cancel class="absolute top-2 right-1 transform rotate-40 text-red-800 font-extrabold"/>
   </div>
+</div>
+
+
+<br>
+
+<div class="flex flex-col  border border-black rounded-lg p-4 bg-white h-auto w-fit">
+  <div class="text-2xl text-black font-bold border-b border-gray-300 pb-4">Delete a Task</div>
+  <br>
+  <div class="itbkk-message text-black border-b border-gray-300 pb-4">Do you want to delete the task "_Infrastructure_"?</div>
+  <div class="flex justify-end mt-4">
+    <button class="itbkk-button-cancel px-4 py-2 bg-red-500 text-white rounded-lg mr-2 border-b-2 border-gray-200 shadow-md">Cancel</button>
+    <button class="itbkk-button-confirm px-4 py-2 bg-green-500 text-white rounded-lg border-b-2 border-gray-200 shadow-md">Confirm</button>
+  </div>
+</div>
+
+
 </template>
 
 <style scoped></style>
