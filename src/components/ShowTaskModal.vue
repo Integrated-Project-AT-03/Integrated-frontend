@@ -1,12 +1,13 @@
 <script setup>
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { getItemById, editItem } from "./../assets/fetch.js";
+import { getItemById, editItem } from "./../lib/fetch";
 import TaskManagement from "@/lib/TaskManagement";
-import Loading from "./Loading.vue";
 import Alert from "./Alert.vue";
+import Loading from "./Loading.vue";
 const route = useRoute();
 const router = useRouter();
+const sendStatus = ref(false);
 const dataTask = ref({
   title: "",
   description: "",
@@ -43,6 +44,7 @@ const editTask = async () => {
   isLoading.value = false;
   if (response.status === 500) return router.push({ name: "Task" });
   datas.value.updateTask(route.params.id, response);
+  sendStatus.value = true;
   router.push({ name: "Task" });
 };
 
@@ -147,7 +149,7 @@ const formattDate = (date) =>
             </div>
             <button
               class="btn btn-error w-full text-white hover:bg-base-100 hover:border-base-100"
-              @click="router.push({ name: 'Delete', params: { mode: 'kuy' } })"
+              @click="router.push({ name: 'Delete' })"
             >
               Delete
             </button>
@@ -175,3 +177,4 @@ const formattDate = (date) =>
 </template>
 
 <style scoped></style>
+../lib/fetch.js

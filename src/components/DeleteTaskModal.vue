@@ -1,16 +1,19 @@
 <script setup>
 import { useRoute, useRouter } from "vue-router";
-import { deleteItemById } from "../assets/fetch.js";
-import TaskManagement from "@/lib/TaskManagement";
+import { deleteItemById } from "../lib/fetch";
+import taskManagement from "@/lib/TaskManagement";
 import { ref } from "vue";
-
-const datas = ref(TaskManagement);
+import Loading from "./Loading.vue";
+const datas = ref(taskManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
+const isLoading = ref(false);
 const router = useRouter();
 const route = useRoute();
 async function deleteTask() {
+  isLoading.value = true;
   const deleteTask = await deleteItemById(`${uri}/v1/tasks`, route.params.id);
-  datas.value.deleteTask(id);
+  isLoading.value = false;
+  datas.value.deleteTask(route.params.id);
   router.push({ name: "Task" });
   return deleteTask;
 }
@@ -18,6 +21,7 @@ async function deleteTask() {
 
 <template>
   <div class="w-full h-full absolute flex justify-center items-center z-20">
+    <Loading :is-loading="isLoading" />
     <div
       class="flex flex-col border border-black rounded-lg p-4 bg-white h-auto w-fit"
     >
@@ -26,7 +30,9 @@ async function deleteTask() {
       </div>
       <br />
       <div class="itbkk-message text-black border-gray-300 pb-4">
-        Do you want to delete the task "Infrastructure"?
+        Do you want to delete the task "{{
+          datas.findTask($route.params.id)?.title
+        }}"?
       </div>
 
       <div class="flex gap-2 justify-end mt-2">
@@ -48,3 +54,4 @@ async function deleteTask() {
 </template>
 
 <style scoped></style>
+../lib/fetch.js

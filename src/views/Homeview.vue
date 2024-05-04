@@ -3,13 +3,15 @@ import { onMounted, ref } from "vue";
 import TaskManagement from "./../lib/TaskManagement.js";
 import Loading from "./../components/Loading.vue";
 import { useRoute } from "vue-router";
-import { getItems } from "./../assets/fetch.js";
+import { getItems } from "./../lib/fetch";
+import Status from "./../lib/Status";
 import Alert from "@/components/Alert.vue";
+
 const datas = ref(TaskManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
 const route = useRoute();
 const isLoading = ref(true);
-
+const status = ref(Status);
 onMounted(async function () {
   const data = await getItems(`${uri}/v1/tasks`);
   isLoading.value = false;
@@ -19,6 +21,7 @@ onMounted(async function () {
 
 <template>
   <Loading :is-loading="isLoading" />
+
   <div
     class="container mx-auto flex flex-col gap-3"
     :class="route.fullPath.split('/').length > 2 && 'blur-sm'"
@@ -38,7 +41,7 @@ onMounted(async function () {
         Add your task
       </button>
     </div>
-    <Alert massage="llll"></Alert>
+    <Alert />
     <table class="min-w-full divide-y divide-gray-200">
       <thead class="bg-gray-200">
         <tr>
@@ -119,3 +122,4 @@ onMounted(async function () {
 </template>
 
 <style scoped></style>
+../lib/fetch.js

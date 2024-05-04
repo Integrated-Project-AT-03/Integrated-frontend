@@ -1,24 +1,23 @@
 <script setup>
+import Status from "@/lib/Status";
 import CorrectIcon from "./../assets/icons/CorrectIcon.vue";
 import ErrorIcon from "./../assets/icons/ErrorIcon.vue";
-const props = defineProps({
-  status: {
-    validator(value, props) {
-      return ["success", "error"].includes(value);
-    },
-    default: "success",
-  },
-  massage: String,
-});
+import { ref } from "vue";
+const status = ref(Status);
 </script>
+
 <template>
   <div
-    :role="status"
-    class="alert"
-    :class="status === 'success' ? 'alert-success' : 'alert-error'"
+    :role="status.type"
+    class="alert relative"
+    :class="[
+      status.type === 'success' && 'alert-success',
+      status.type === 'error' && 'alert-error',
+    ]"
   >
-    <CorrectIcon v-show="status === 'success'" />
-    <ErrorIcon v-show="status === 'error'" />
-    <span class="tbkk-message-"> {{ massage }}</span>
+    <div class="absolute btn btn-xs btn-error text-white right-3">x</div>
+    <CorrectIcon v-show="status.type === 'success'" />
+    <ErrorIcon v-show="status.type === 'error'" />
+    <span class="tbkk-message"> {{ status.message }} </span>
   </div>
 </template>

@@ -3,7 +3,7 @@ import HomeView from "../views/Homeview.vue";
 import EmptyModal from "@/components/EmptyModal.vue";
 import AddTaskModal from "@/components/AddTaskModal.vue";
 import ShowTaskModal from "@/components/ShowTaskModal.vue";
-import { getItems } from "./../assets/fetch.js";
+import { getItems } from "../lib/fetch.js";
 import DeleteTaskModal from "@/components/DeleteTaskModal.vue";
 
 const router = createRouter({
