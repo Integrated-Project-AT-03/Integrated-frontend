@@ -4,6 +4,7 @@ import { addItem } from "../assets/fetch.js";
 import TaskStatusManagement from "@/lib/TaskStatusManagement.js";
 import { ref } from "vue";
 import colorStore from "./../lib/ColorsStore";
+import ButtonModal from "./ButtonModal.vue";
 
 const emits = defineEmits(["message"]);
 const datas = ref(TaskStatusManagement);
@@ -93,18 +94,15 @@ async function addNewStatus() {
 
         <div class="divider"></div>
         <div class="flex justify-end mt-4 mr-4 gap-3">
-          <button
-            @click="addNewStatus(newData)"
-            class="itbkk-button-comfirm btn btn-success w-16 hover:bg-base-100 hover:border-base-100"
-          >
-            Save
-          </button>
-          <button
-            @click="router.push({ name: 'Statuses' })"
-            class="itbkk-button-cancle btn"
-          >
-            Cancel
-          </button>
+          <ButtonModal :bgcolor="newData.name === '' ? '#333333' : '#16a34a'" :message="'save'" @click="addNewStatus(newData)" 
+          class="itbkk-button-comfirm btn   w-16 hover:bg-base-100 hover:border-base-100"
+          :disabled="newData.name === ''">
+         
+        </ButtonModal>
+        <ButtonModal :message="'Cancel'" :bg="'black' " @click="router.push({ name: 'Statuses' })"
+            class="itbkk-button-cancle btn">
+          </ButtonModal>
+    
         </div>
       </div>
     </div>

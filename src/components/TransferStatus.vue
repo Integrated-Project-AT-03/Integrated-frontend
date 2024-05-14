@@ -2,6 +2,8 @@
 import { onMounted, ref } from "vue";
 const selectStatus = ref();
 import { getItems, changeTasksStatus } from "../assets/fetch.js";
+import ButtonModal from "./ButtonModal.vue";
+
 const uri = import.meta.env.VITE_SERVER_URI;
 const props = defineProps({
   selectedStatus: Object,
@@ -70,19 +72,13 @@ const submit = async () => {
         </div>
         <div class="divider"></div>
         <div class="flex justify-end">
-          <button
-            @click="$emit('close')"
-            class="itbkk-button-cancel btn btn-danger w-16 hover:bg-base-100 hover:border-base-100 mr-3"
-          >
-            Cancel
-          </button>
-          <button
-            :disabled="selectStatus === selectedId"
+          <ButtonModal message="Cancel" @click="$emit('close')"
+            class="itbkk-button-cancel btn btn-danger w-16 hover:bg-base-100 hover:border-base-100 mr-3" />
+          
+          <ButtonModal message="Transfer" :disabled="selectStatus === selectedId"
             @click="submit"
-            class="itbkk-button-comfirm btn btn-success w-16 hover:bg-base-100 hover:border-base-100 ml-1"
-          >
-            Transfer
-          </button>
+            class="itbkk-button-comfirm btn btn-success w-16 hover:bg-base-100 hover:border-base-100 ml-1" />
+         
         </div>
       </div>
     </div>

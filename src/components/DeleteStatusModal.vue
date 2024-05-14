@@ -3,6 +3,7 @@ import { useRoute, useRouter } from "vue-router";
 import { deleteItemById } from "../assets/fetch.js";
 import TaskStatusManagement from "@/lib/TaskStatusManagement";
 import { ref } from "vue";
+import ButtonModal from "./ButtonModal.vue";
 
 const props = defineProps({
   status: {
@@ -46,22 +47,17 @@ async function deleteStatus(id) {
       <div class="divider"></div>
       <div class="flex justify-end mt-4 gap-3">
         <form method="dialog">
-          <button
-            class="itbkk-button-confirm btn btn-success text-slate-200"
-            @click="deleteStatus(status.id)"
-          >
-            Confirm
-          </button>
+          <ButtonModal message="Confirm"  class="itbkk-button-confirm btn btn-success text-slate-200"
+            @click="deleteStatus(status.id)"/>
         </form>
         <form method="dialog">
-          <button class="itbkk-button-cancel btn btn-error text-slate-200">
-            Cancel
-          </button>
+          <ButtonModal message="Cancel"  class="itbkk-button-cancel btn btn-error text-slate-200"/>
         </form>
       </div>
     </div>
   </dialog>
 </template>
+
 
 <style scoped></style>
 @/lib/Colors.js

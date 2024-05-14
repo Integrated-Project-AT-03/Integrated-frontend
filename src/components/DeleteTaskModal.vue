@@ -3,6 +3,8 @@ import { useRoute, useRouter } from "vue-router";
 import { deleteItemById } from "../assets/fetch.js";
 import TaskManagement from "@/lib/TaskManagement";
 import { ref } from "vue";
+import ButtonModal from "./ButtonModal.vue";
+
 const emits = defineEmits(["message"]);
 const datas = ref(TaskManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
@@ -40,17 +42,11 @@ async function deleteTask(id) {
       <div class="divider"></div>
       <div class="flex justify-end mt-4 gap-3">
         <form method="dialog">
-          <button
-            class="itbkk-button-confirm btn btn-success text-slate-200"
-            @click="deleteTask(route.params.id)"
-          >
-            Confirm
-          </button>
+          <ButtonModal message="Confirm"  class="itbkk-button-confirm btn btn-success text-slate-200"
+            @click="deleteTask(route.params.id)"/>
         </form>
         <form method="dialog">
-          <button class="itbkk-button-cancel btn btn-error text-slate-200">
-            Cancel
-          </button>
+          <ButtonModal message="Cancel"  class="itbkk-button-cancel btn btn-error text-slate-200"/>
         </form>
       </div>
     </div>

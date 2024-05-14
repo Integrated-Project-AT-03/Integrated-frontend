@@ -6,6 +6,7 @@ import TaskManagement from "@/lib/TaskManagement";
 import Loading from "./Loading.vue";
 import Trash from "../assets/icons/Trash.vue";
 import DeleteTaskModal from "./DeleteTaskModal.vue";
+import ButtonModal from "./ButtonModal.vue";
 
 const emits = defineEmits(["message"]);
 const route = useRoute();
@@ -87,30 +88,17 @@ const handleMessage = (e) => {
 </script>
 
 <template>
-  <div
-    class="w-screen h-screen absolute flex justify-center top-0 items-center z-10"
-  >
+  <div class="w-screen h-screen absolute flex justify-center top-0 items-center z-10">
     <RouterView @message="handleMessage($event)" />
-    <div
-      class="relative overflow-hidden w-[65rem] h-[49rem] bg-neutral drop-shadow-2xl rounded-2xl"
-    >
+    <div class="relative overflow-hidden w-[65rem] h-[49rem] bg-neutral drop-shadow-2xl rounded-2xl">
       <Loading :is-loading="isLoading" />
-      <div
-        class="text-xl pr-5 flex gap-5 justify-between items-center text-slate-200 mt-5 ml-6 font-bold"
-      >
-        <input
-          :disabled="!isEditMode"
-          class="itbkk-title w-[60rem]"
-          :class="
-            isEditMode
-              ? ' h-11 rounded-2xl p-2 bg-secondary border-base-100'
-              : ' bg-neutral hover:border-neutral'
-          "
-          type="text"
-          v-model.trim="dataTask.title"
-        />
+      <div class="text-xl pr-5 flex gap-5 justify-between items-center text-slate-200 mt-5 ml-6 font-bold">
+        <input :disabled="!isEditMode" class="itbkk-title w-[60rem]" :class="isEditMode
+          ? ' h-11 rounded-2xl p-2 bg-secondary border-base-100'
+          : ' bg-neutral hover:border-neutral'
+          " type="text" v-model.trim="dataTask.title" />
 
-        <button
+        <ButtonModal :message="isEditMode ? 'Reset' : 'Edit mode'" :bgcolor="isEditMode ? 'btn-error' : 'bg-edit'"
           @click="
             [
               $router.push({
@@ -119,53 +107,39 @@ const handleMessage = (e) => {
               }),
               isEditMode && loadTask(),
             ]
-          "
-          class="btn itbkk-button-edit w-30 hover:bg-base-100 border-0 hover:border-base-100"
-          :class="!isEditMode ? 'bg-edit' : 'btn-error text-white'"
-        >
-          {{ route.params.mode !== "edit" ? "Edit mode" : "Reset" }}
-        </button>
-        <Trash
-          onclick="deletetask.showModal()"
-          class="text-error cursor-pointer"
-        />
+            " class="btn itbkk-button-edit w-30 hover:bg-base-100 border-0 hover:border-base-100"
+          :class="!isEditMode ? 'bg-edit' : 'btn-error text-white'">ป
+          {{ route.params.mode !== "edit" ? "Edit mode" : "Reset" }} />
+        </ButtonModal>
+
+
+        <Trash onclick="deletetask.showModal()" class="text-error cursor-pointer" />
       </div>
       <div class="divider"></div>
       <div class="flex justify-around m-4">
         <div class="flex flex-col gap-2 text-slate-200">
           <div>Description</div>
-          <textarea
-            :disabled="!isEditMode"
-            v-model.trim="dataTask.description"
+          <textarea :disabled="!isEditMode" v-model.trim="dataTask.description"
             :placeholder="dataTask.description ?? 'No Description Provided'"
-            class="itbkk-description w-[35rem] h-[32rem] rounded-2xl border p-4 bg-secondary placeholder:text-gray-400 placeholder:italic border-base-100"
-          ></textarea>
+            class="itbkk-description w-[35rem] h-[32rem] rounded-2xl border p-4 bg-secondary placeholder:text-gray-400 placeholder:italic border-base-100"></textarea>
         </div>
         <div class="flex flex-col gap-10">
           <div class="flex flex-col gap-2 text-slate-200">
             <div>Assignees</div>
-            <textarea
-              :disabled="!isEditMode"
-              :placeholder="dataTask.assignees ?? 'Unassigned'"
+            <textarea :disabled="!isEditMode" :placeholder="dataTask.assignees ?? 'Unassigned'"
               v-model.trim="dataTask.assignees"
-              class="itbkk-assignees w-[20rem] h-[12rem] rounded-2xl placeholder:text-gray-400 placeholder:italic border p-4 bg-secondary border-base-100"
-            ></textarea>
+              class="itbkk-assignees w-[20rem] h-[12rem] rounded-2xl placeholder:text-gray-400 placeholder:italic border p-4 bg-secondary border-base-100"></textarea>
           </div>
           <div class="flex flex-col gap-2 text-slate-200">
             <div>Status</div>
-            <select
-              :disabled="!isEditMode"
-              v-model.trim="dataTask.status"
-              class="itbkk-status select w-full max-w-xs bg-base-100"
-            >
+            <select :disabled="!isEditMode" v-model.trim="dataTask.status"
+              class="itbkk-status select w-full max-w-xs bg-base-100">
               <option v-for="status in selectStatus" :value="status.name">
                 {{ status.name }}
               </option>
             </select>
           </div>
-          <div
-            class="flex flex-col justify-between h-3/4 gap-3 pb-3 text-slate-200"
-          >
+          <div class="flex flex-col justify-between h-3/4 gap-3 pb-3 text-slate-200">
             <div>
               <div class="flex gap-2">
                 TimeZone:
@@ -191,27 +165,18 @@ const handleMessage = (e) => {
       </div>
       <div class="divider"></div>
       <div class="flex justify-end m-4 gap-3">
-        <button
-          v-show="isEditMode"
-          @click="editTask()"
+
+        <ButtonModal :message="'save'" v-show="isEditMode" @click="editTask()"
           class="itbkk-button-confirm btn drop-shadow-lg btn-success w-16 hover:bg-base-100 hover:border-base-100"
-          :disabled="
-            dataTask.title === '' ||
+          :disabled="dataTask.title === '' ||
             ((dataTask.assignees ?? '') === (compareTask?.assignees ?? '') &&
               (dataTask.description ?? '') ===
-                (compareTask?.description ?? '') &&
+              (compareTask?.description ?? '') &&
               (dataTask.status ?? '') === (compareTask?.status ?? '') &&
               (dataTask.title ?? '') === (compareTask?.title ?? ''))
-          "
-        >
-          Save
-        </button>
-        <button
-          @click="$router.push({ path: `/task` })"
-          class="itbkk-button-cancel btn"
-        >
-          Close
-        </button>
+            " />
+        <ButtonModal message="Cancel" @click="$router.push({ path: `/task` })" class="itbkk-button-cancel btn" />
+        
       </div>
     </div>
   </div>

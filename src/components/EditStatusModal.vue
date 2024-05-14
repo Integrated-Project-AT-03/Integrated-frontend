@@ -4,6 +4,7 @@ import { getItemById, editItem } from "../assets/fetch.js";
 import { onMounted, ref } from "vue";
 import Loading from "../components/Loading.vue";
 import TaskStatusManagement from "./../lib/TaskStatusManagement";
+import ButtonModal from "./ButtonModal.vue";
 
 const emits = defineEmits(["message"]);
 const management = ref(TaskStatusManagement);
@@ -84,10 +85,10 @@ async function updateStatus() {
       </div>
       <div class="divider"></div>
       <div class="flex gap-3 justify-end mr-5">
-        <button @click="updateStatus()" class="btn btn-success">Save</button>
-        <button @click="router.push({ name: 'Statuses' })" class="btn">
-          Cancel
-        </button>
+      <ButtonModal message="Save"   @click="updateStatus()" class="btn btn-success"/>
+       
+      <ButtonModal message="Cancel" @click="router.push({ name: 'Statuses' })" class="btn"/>
+        
       </div>
     </div>
   </div>

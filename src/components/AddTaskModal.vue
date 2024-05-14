@@ -3,6 +3,7 @@ import { useRouter } from "vue-router";
 import { addItem, getItems } from "../assets/fetch.js";
 import TaskManagement from "@/lib/TaskManagement";
 import { onMounted, ref } from "vue";
+import ButtonModal from "./ButtonModal.vue";
 const selectStatus = ref();
 const emits = defineEmits(["message"]);
 
@@ -72,7 +73,7 @@ async function addNewTask(newItem) {
             </div>
             <div class="flex flex-col gap-3">
               <div>Status</div>
-              <select
+              <select 
                 v-model.trim="newData.status"
                 class="itbkk-status select w-full max-w-xs bg-base-100"
               >
@@ -85,20 +86,14 @@ async function addNewTask(newItem) {
         </div>
       </div>
       <div class="flex justify-end gap-3 mr-4">
-        <button
-          @click="addNewTask(newData)"
-          class="itbkk-button-comfirm btn btn-success w-16 hover:bg-base-100 hover:border-base-100"
-          :disabled="newData.title === ''"
-        >
-          Save
-        </button>
 
-        <button
-          @click="router.push({ path: `/task` })"
-          class="itbkk-button-cancle btn"
-        >
-          Cancel
-        </button>
+        <ButtonModal :bgcolor="newData.title === '' ? '#333333' : '#16a34a'" :message="'save'" @click="addNewTask(newData)"
+          class="itbkk-button-comfirm btn btn-success w-16 hover:bg-base-100 hover:border-base-100"
+          :disabled="newData.title === ''" />
+        
+        <ButtonModal  :message="'Cancel'" @click="router.push({ path: `/task` })" class="itbkk-button-cancle btn">
+        </ButtonModal>
+        
       </div>
     </div>
   </div>

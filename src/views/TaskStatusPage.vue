@@ -7,6 +7,7 @@ import TransferStatus from "../components/TransferStatus.vue";
 import { getItems } from "../assets/fetch.js";
 import Loading from "../components/Loading.vue";
 import DeleteStatusModal from "./../components/DeleteStatusModal.vue";
+import ButtonModal from "@/components/ButtonModal.vue";
 
 const emits = defineEmits(["message"]);
 const datas = ref(TaskStatusManagement);
@@ -26,6 +27,8 @@ onMounted(async function () {
 const handleMessage = (e) => {
   emits("message", e);
 };
+
+
 </script>
 
 <template>
@@ -125,21 +128,16 @@ const handleMessage = (e) => {
               v-if="status.id !== 1"
               class="flex justify-center items-center gap-2"
             >
-              <button
-                class="btn bg-edit border-0"
+            <ButtonModal message="Edit" class="btn bg-edit border-0"
                 @click="
                   router.push({ name: 'EditStatus', params: { id: status.id } })
-                "
-              >
-                Edit
-              </button>
-              <button
-                @click="() => (selectedStatus = { ...status, index })"
+                "/>
+             
+            <ButtonModal message="Delete"  @click="() => (selectedStatus = { ...status, index })"
+                
                 class="btn btn-error"
-                onclick="deleteModal.showModal()"
-              >
-                Delete
-              </button>
+                onclick="deleteModal.showModal()" />
+            
             </div>
           </td>
         </tr>
