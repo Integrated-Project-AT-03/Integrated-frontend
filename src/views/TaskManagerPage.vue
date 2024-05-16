@@ -71,7 +71,7 @@ onMounted(async function () {
   datas.value.setTasks(data.items);
 });
 
-async function sortTask(){
+async function sortTask() {
   const sort = bool.value ? 'ASC' : 'DES'
   console.log(sort);
   const res = await getItems(`${uri}/v2/tasks?sortBy=status&sortDirection=${sort}&filterStatuses=Goko,done,Add`)
@@ -89,17 +89,11 @@ const handleMessage = (e) => {
 
 <template>
   <Loading :is-loading="isLoading" />
-  <div
-    class="container mx-auto flex flex-col gap-3"
-    :class="
-      route.fullPath.split('/').length > 2 ||
-      (route.name === 'Addstatus' && 'blur-sm')
-    "
-  >
+  <div class="container mx-auto flex flex-col gap-3" :class="route.fullPath.split('/').length > 2 ||
+    (route.name === 'Addstatus' && 'blur-sm')
+    ">
     <div class="text-5xl font-extrabold ... w-full flex justify-center m-7">
-      <span
-        class="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500"
-      >
+      <span class="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500">
         <div class="text-5xl">IT-Bangmod Kradan Kanban</div>
       </span>
     </div>
@@ -107,37 +101,31 @@ const handleMessage = (e) => {
 
     <div class="container mx-auto p-4">
       <div class="flex items-center">
-        <input class="border p-2 rounded-md mr-2 w-1/3" type="text" v-model="newItem" @keyup.enter="addItem"
+        <input class="border p-2 rounded-md mr-2 w-1/4" type="text" v-model="newItem" @keyup.enter="addItem"
           placeholder="Add a new item" />
-        <button class="btn btn-secondary" @click="clearAll">
+        <button class=" btn btn-secondary  bg-red-700" @click="clearAll">
           Clear All
         </button>
       </div>
-      <div class="flex flex-wrap gap-2 mt-4">
+      <br>
+      <div class="flex flex-wrap gap-2 ">
         <div v-for="(item, index) in items" :key="index"
-          class="relative border p-2 rounded-md flex items-center bg-white">
+          class="relative border p-2 rounded-md flex items-center bg-black shadow-md">
           <span>{{ item }}</span>
-          <button class="absolute top-0 right-0 text-red-500 p-1" @click="removeItem(index)">
+          <button class="absolute top-[-5px] right-0.5 text-red-500 " @click="removeItem(index)">
             &times;
           </button>
+
         </div>
       </div>
     </div>
 
     <div class="w-full flex items-center justify-end">
       <div class="flex justify-end gap-4">
-        <Button
-          class="itbkk-manage-status"
-          bgcolor="#666666"
-          message="Manage Status"
-          @click="router.push({ name: 'Statuses' })"
-        />
-        <Button
-          class="itbkk-button-add"
-          bgcolor="#06b6d4"
-          message="Add task"
-          @click="$router.push({ name: 'AddTask' })"
-        />
+        <Button class="itbkk-manage-status" bgcolor="#666666" message="Manage Status"
+          @click="router.push({ name: 'Statuses' })" />
+        <Button class="itbkk-button-add" bgcolor="#06b6d4" message="Add task"
+          @click="$router.push({ name: 'AddTask' })" />
       </div>
     </div>
     <table class="min-w-full divide-y divide-gray-200">
@@ -169,8 +157,9 @@ const handleMessage = (e) => {
             No task
           </td>
         </tr>
-        <tr class="itbkk-item itbkk-button-action hover:bg-slate-200" v-for="(task, index) in isSorted ? dataAsc : datas.getTasks()"
-          :key="task.id" @click="$router.push({ name: 'TaskDetail', params: { id: task.id } })">
+        <tr class="itbkk-item itbkk-button-action hover:bg-slate-200"
+          v-for="(task, index) in isSorted ? dataAsc : datas.getTasks()" :key="task.id"
+          @click="$router.push({ name: 'TaskDetail', params: { id: task.id } })">
           <td class="px-6 py-4 whitespace-nowrap">
             <div class="text-sm text-gray-900">{{ index + 1 }}</div>
           </td>
@@ -178,10 +167,7 @@ const handleMessage = (e) => {
             <div class="text-sm text-gray-900">{{ task.title }}</div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
-            <div
-              class="text-sm text-gray-900 itbkk-assignees"
-              :class="task?.assignees ?? 'italic'"
-            >
+            <div class="text-sm text-gray-900 itbkk-assignees" :class="task?.assignees ?? 'italic'">
               {{ task?.assignees ?? "Unassigned" }}
             </div>
           </td>
