@@ -101,33 +101,34 @@ const handleMessage = (e) => {
 
     <div class="container mx-auto p-4">
       <div class="flex items-center">
-        <input class="border p-2 rounded-md mr-2 w-1/4" type="text" v-model="newItem" @keyup.enter="addItem"
-          placeholder="Add a new item" />
-        <button class=" btn btn-secondary  bg-red-700" @click="clearAll">
+        <input class="itbkk-status-filter border p-2 rounded-md mr-2 w-1/4" type="text" v-model="newItem" @keyup.enter="addItem"
+          placeholder="Filter by status(es)" />
+        <button class="itbkk-filter-clear btn btn-secondary  bg-red-700" @click="clearAll">
           Clear All
         </button>
       </div>
       <br>
       <div class="flex flex-wrap gap-2 ">
         <div v-for="(item, index) in items" :key="index"
-          class="relative border p-2 rounded-md flex items-center bg-black shadow-md">
+          class="itbkk-filter-item relative border p-2 rounded-md flex items-center bg-black shadow-md">
           <span>{{ item }}</span>
           <button class="absolute top-[-5px] right-0.5 text-red-500 " @click="removeItem(index)">
             &times;
           </button>
+          
 
+        </div>
+      </div>
+      <div class="w-full flex items-center justify-end">
+        <div class="flex justify-end gap-4">
+          <Button class="itbkk-manage-status" bgcolor="#666666" message="Manage Status"
+            @click="router.push({ name: 'Statuses' })" />
+          <Button class="itbkk-button-add" bgcolor="#06b6d4" message="Add task"
+            @click="$router.push({ name: 'AddTask' })" />
         </div>
       </div>
     </div>
 
-    <div class="w-full flex items-center justify-end">
-      <div class="flex justify-end gap-4">
-        <Button class="itbkk-manage-status" bgcolor="#666666" message="Manage Status"
-          @click="router.push({ name: 'Statuses' })" />
-        <Button class="itbkk-button-add" bgcolor="#06b6d4" message="Add task"
-          @click="$router.push({ name: 'AddTask' })" />
-      </div>
-    </div>
     <table class="min-w-full divide-y divide-gray-200">
       <thead class="bg-gray-200">
         <tr>
