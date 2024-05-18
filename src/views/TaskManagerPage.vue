@@ -13,11 +13,15 @@ import StatusSetting from '../components/StatusSetting.vue'
 const newItem = ref('');
 const items = ref([]);
 
-const addItem = () => {
+
+const addItem = async () => {
   if (newItem.value.trim() !== '') {
     items.value.push(newItem.value.trim());
     newItem.value = '';
   }
+  dataSort.value = (await getItems(`${uri}/v2/tasks?sortBy=statusStatusName&sortDirection=${sort.value}&filterStatuses=${items.value.join(',')}`)).items;
+  isSorted.value = true
+
 };
 
 const removeItem = (index) => {
@@ -73,22 +77,22 @@ onMounted(async function () {
   datas.value.setTasks(data.items);
 });
 
-async function sortTask(){
-  if(sortOrder.value === 'default'){
+async function sortTask() {
+  if (sortOrder.value === 'default') {
     sort.value = 'default'
-  
+
     isSorted.value = false
-  } else if (sortOrder.value === 'ascending'){
+  } else if (sortOrder.value === 'ascending') {
 
     sort.value = 'ASC'
     isSorted.value = true
-  } else if (sortOrder.value === 'descending'){
-   
+  } else if (sortOrder.value === 'descending') {
+
     sort.value = 'DES'
     isSorted.value = true
   }
   isLoading.value = true
-  dataSort.value = (await getItems(`${uri}/v2/tasks?sortBy=statusStatusName&sortDirection=${sort.value}&filterStatuses=Goko,done,Add`)).items
+  // dataSort.value = (await getItems(`${uri}/v2/tasks?sortBy=statusStatusName&sortDirection=${sort.value}&filterStatuses=${statusesString}`)).items
   isLoading.value = false;
 }
 
@@ -100,51 +104,38 @@ const handleMessage = (e) => {
 
 <template>
   <Loading :is-loading="isLoading" />
-  <div
-    class="container mx-auto flex flex-col gap-3"
-    :class="
-      route.fullPath.split('/').length > 2 ||
-      (route.name === 'Addstatus' && 'blur-sm')
-    "
-  >
+  <div class="container mx-auto flex flex-col gap-3" :class="route.fullPath.split('/').length > 2 ||
+    (route.name === 'Addstatus' && 'blur-sm')
+    ">
     <div class="w-full flex justify-end mt-6">
       <Setting class="cursor-pointer" onclick="status_setting.showModal()" />
     </div>
     <div class="text-5xl font-extrabold ... w-full flex justify-center m-7">
-      <span
-        class="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500"
-      >
+      <span class="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500">
         <div class="text-5xl">IT-Bangmod Kradan Kanban</div>
       </span>
     </div>
 
     <div class="w-full flex items-center justify-around">
       <div class="container mx-auto p-4">
-      <div class="flex items-center">
-        <input class="border p-2 rounded-md mr-2 w-1/3 text-gray-900" type="text" v-model="newItem" @keyup.enter="addItem"
-          placeholder="Add a new item" />
+        <div class="flex items-center">
+          <input class="border p-2 rounded-md mr-2 w-1/3 text-gray-900" type="text" v-model="newItem"
+            @keyup.enter="addItem" placeholder="Add a new item" />
           <Button message="Clear All" @click="clearAll" bgcolor="#666666" />
-      </div>
-      <div class="flex flex-wrap gap-2 mt-2">
-        <div v-for="(item, index) in items" :key="index"
-          class="relative p-3 rounded-md flex items-center bg-white text-gray-900 cursor-pointer hover:bg-slate-300" @click="removeItem(index)">
-          <span>{{ item }}</span>
+        </div>
+        <div class="flex flex-wrap gap-2 mt-2">
+          <div v-for="(item, index) in items" :key="index"
+            class="relative p-3 rounded-md flex items-center bg-white text-gray-900 cursor-pointer hover:bg-slate-300"
+            @click="removeItem(index)">
+            <span>{{ item }}</span>
+          </div>
         </div>
       </div>
-    </div>
       <div class="flex justify-end gap-4">
-        <Button
-          class="itbkk-manage-status"
-          bgcolor="#666666"
-          message="Manage Status"
-          @click="router.push({ name: 'Statuses' })"
-        />
-        <Button
-          class="itbkk-button-add"
-          bgcolor="#06b6d4"
-          message="Add task"
-          @click="$router.push({ name: 'AddTask' })"
-        />
+        <Button class="itbkk-manage-status" bgcolor="#666666" message="Manage Status"
+          @click="router.push({ name: 'Statuses' })" />
+        <Button class="itbkk-button-add" bgcolor="#06b6d4" message="Add task"
+          @click="$router.push({ name: 'AddTask' })" />
       </div>
     </div>
     <table class="min-w-full divide-y divide-gray-200">
@@ -176,8 +167,9 @@ const handleMessage = (e) => {
             No task
           </td>
         </tr>
-        <tr class="itbkk-item itbkk-button-action hover:bg-slate-200" v-for="(task, index) in isSorted ? dataSort : datas.getTasks()"
-          :key="task.id" @click="$router.push({ name: 'TaskDetail', params: { id: task.id } })">
+        <tr class="itbkk-item itbkk-button-action hover:bg-slate-200"
+          v-for="(task, index) in isSorted ? dataSort : datas.getTasks()" :key="task.id"
+          @click="$router.push({ name: 'TaskDetail', params: { id: task.id } })">
           <td class="px-6 py-4 whitespace-nowrap">
             <div class="text-sm text-gray-900">{{ index + 1 }}</div>
           </td>
@@ -185,10 +177,7 @@ const handleMessage = (e) => {
             <div class="text-sm text-gray-900">{{ task.title }}</div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
-            <div
-              class="text-sm text-gray-900 itbkk-assignees"
-              :class="task?.assignees ?? 'italic'"
-            >
+            <div class="text-sm text-gray-900 itbkk-assignees" :class="task?.assignees ?? 'italic'">
               {{ task?.assignees ?? "Unassigned" }}
             </div>
           </td>
